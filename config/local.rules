@@ -1,0 +1,14 @@
+# $Id: local.rules,v 1.11 2004/07/23 20:15:44 bmc Exp $
+# ----------------
+# LOCAL RULES
+# ----------------
+# This file intentionally does not come with signatures.  Put your local
+# additions here.
+#alert tcp any any -> $HOME_NET any (msg:"Nmap scan CONSERVATIVE"; flags:S; threshold: type threshold, track by_src, count 20, seconds 5; sid:1000006; rev:1;)
+#alert tcp any any -> $HOME_NET any (msg:"Nmap scan SENSITIVE"; flags:S; threshold: type threshold, track by_src, count 5, seconds 10; sid:1000005; rev:1;)
+alert tcp any any -> $HOME_NET any (msg:"Possible NMAP Scan Detected"; flags:S; threshold: type threshold, track by_src, count 10, seconds 5; sid:1000001; rev:1;)
+alert icmp any any -> $HOME_NET any (msg:"ICMP Ping Flood Detected"; itype:8; threshold: type threshold, track by_src, count 30, seconds 5; sid:1000002; rev:1;)
+alert tcp any any -> $HOME_NET 22 (msg:"Possible SSH Brute Force Attempt"; flags:S; threshold: type threshold, track by_src, count 5, seconds 60; sid:1000003; rev:1;)
+alert udp any any -> $HOME_NET any (msg:"UDP scan baseline"; threshold: type threshold, track by_src, count 10, seconds 5; sid:1000004; rev:1;)
+
+
