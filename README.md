@@ -3,7 +3,7 @@
 **A comprehensive security project demonstrating detection, prevention and response capabilities on Ubuntu Server through progressive hardening, custom IDS rules, and automated threat response.**
 
 ---
-## 📋 Table of Contents
+## Table of Contents
 
 - [Project Overview](#project-overview)
 - [Skills Demonstrated](#skills-demonstrated)
@@ -12,6 +12,7 @@
 - [Phase 3: Core Security Hardening](#phase-3-core-security-hardening)
 - [Phase 4: Automated Intrusion Prevention with Fail2Ban](#phase-4-automated-intrusion-prevention-with-fail2ban)
 - [Project Conclusion](#project-conclusion)
+- [Key Insights](#key-insights)
 
 ---
 ## Project Overview
@@ -46,7 +47,7 @@ This project demonstrates building enterprise-grade endpoint security on Ubuntu 
 
 **Goal** To build a defense-in-depth system where multiple security controls work together, so even if one layer fails, another would catch the threat.
 
-### Skills I Demonstrated
+## Skills I Demonstrated
 
 **Linux System Administration:**
 - Service management and minimization
@@ -69,13 +70,13 @@ This project demonstrates building enterprise-grade endpoint security on Ubuntu 
 - Rule creation and tuning
 - Attack simulation and validation
 - Incident detection and response
-- Log correlation across multiple systems
+- Log correlation across systems
 
 ---
 
 ## Phase 1: Initial Access and Baseline Configuration
 
-## 1.1 Lab Environment
+### 1.1 Lab Environment
 
 I used VirtualBox to create two VMs on the same NAT network, this setup mimics a realistic scenario where an attacker had gained access to the same network as the target server.
 
@@ -599,7 +600,7 @@ The system is already configured to:
 
 This means security patches are automatically downloaded and installed without requiring administrator action. This configuration ensures the system is patched within 24 hours.
 
-### 3.3 Rootkit Detection with Rkhunter
+### 3.4 Rootkit Detection with Rkhunter
 
 Detecting rootkits and malicious system modifications is critical for identifying compromised systems. Rkhunter scans for known rootkits, verifies system binary integrity and checks for suspicious files commonly associated with advanced persistent threats.
 
@@ -646,7 +647,7 @@ After establishing the baseline, rkhunter can now detect if critical system bina
 
 **Security value:** Rkhunter focuses specifically on rootkit detection—sophisticated malware that operates at a deep system level and attempts to hide its presence. This complements other security controls by providing visibility into attacks that bypass application layer defenses.
 
-### 3.4 Security Event Logging with auditd
+### 3.5 Security Event Logging with auditd
 
 Detecting security incidents requires comprehensive visibility into system activity. The Linux Audit daemon (auditd) provides detailed logging of security-relevant events, including file modifications, system calls and authentication attempts which creates a forensic audit trail for incident investigation.
 
@@ -681,7 +682,7 @@ sudo auditctl -l
 
 I understand that rules added with `auditctl` are active immediately but not persistent across reboots. For production environments, these rules would be added to `/etc/audit/rules.d/audit.rules` to survive system reboots. 
 
-### 3.5 File Permissions Hardening
+### 3.6 File Permissions Hardening
 
 Critical system files need restrictive permissions to prevent unauthorized access or modification.
 
@@ -705,7 +706,7 @@ The sshd_config file contains critical security settings that reveal the system'
 
 If unprivileged users can read this file, they can understand the system's security posture. With 644 permissions (group and other readable), any user on the system could read these configuration details. Restricting to 600 ensures only the root user who manages SSH can access this sensitive configuration information.
 
-### 3.6 Firewall Hardening
+### 3.7 Firewall Hardening
 
 ![UFW Hardened](screenshots/phase3/ufw_hardened.png)
 
@@ -793,7 +794,7 @@ This will also require **Log flooding protection; Rate-limited logging (e.g., 5 
 
 This hybrid approach of default deny foundation with selective logged denies, balances operational simplicity with comprehensive security monitoring for incident detection and response.
 
-### 3.7 Security Posture: Phase 1 Baseline vs. Phase 3 Hardened
+### 3.8 Security Posture: Phase 1 Baseline vs. Phase 3 Hardened
 
 | Component | Phase 1 (Baseline) | Phase 3 (Hardened) | Security Impact |
 |-----------|-------------------|-------------------|-----------------|
@@ -809,7 +810,7 @@ This hybrid approach of default deny foundation with selective logged denies, ba
 | Audit Framework | Basic syslog | auditd rules | Comprehensive forensic logging of critical file modifications |
 | Firewall Rules | Single allow rule | Rate limiting + protocol blocking + medium logging | Network-layer attack prevention and visibility |
 
-### 3.8 Key Security Principles Demonstrated
+### 3.9 Key Security Principles Demonstrated
 
 **Defense in Depth:** Multiple independent security layers ensure that if one control fails or is bypassed, others prevent compromise. SSH hardening eliminates password based attacks, while audit logging detects unauthorized file modifications and firewall rate limiting slows connection based attacks.
 
@@ -944,12 +945,14 @@ This project implemented comprehensive endpoint security with three distinct lay
 
 **Response:** Fail2Ban (automated IP blocking based on authentication patterns), integrated detection-to-response pipeline.
 
-### Key Insights
+## Key Insights
 
 **Layered security prevents compromise:** Individual controls can be bypassed, but it is more difficult to defeat multiple security layers simultaneously. 
 
-**Automation enables scale:** Manual monitoring can't process modern log volumes. Automated tools respond to threats faster than human operators while reducing alert fatigue.
+**Automation enables scale:** Manual monitoring can't process large log volumes efficiently. Also, automated tools respond to threats faster than human operators.
 
 **Integration creates defense:** Snort detection alone requires manual response. Combined with Fail2Ban's automation, it creates a complete detect-and-respond pipeline.
 
 **Trade-offs are inherent:** Every security control has operational impact. It is important to understand these trade-offs—like 10-minute bans versus permanent blocks because it enables appropriate risk-based decisions for the operating environment.
+
+**Operational Security Awareness:** Security requires analytical judgment, not blindy depending on automated tools. For example, rkhunter's alert on a systemd backup file required investigation to distinguish between false positives and genuine threats, demonstrating that effective security operations balance automation with human analysis.
