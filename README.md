@@ -72,6 +72,10 @@ This project demonstrates building enterprise-grade endpoint security on Ubuntu 
 - Incident detection and response
 - Log correlation across systems
 
+**Compliance & Standards Awareness:**
+- CIS Linux Benchmark implementation (SSH hardening, audit logging, firewall configuration)
+- Security industry best practices (defense-in-depth, least privilege, automated patching)
+
 ---
 
 ## Phase 1: Initial Access and Baseline Configuration
